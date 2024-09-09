@@ -112,8 +112,9 @@ mediaerrores =np.mean(errores)
 
 # Graficar solo los puntos en color rojo con tamaño ajustado
 plt.scatter(dist_arduino, dist_regla, color='darkred', s=0.05)  # 's' ajusta el tamaño de los puntos
-plt.errorbar(dist_arduino, dist_regla, xerr=errores, yerr=0.1, fmt='o', color='orangered', ecolor='black', capsize=8)
-plt.plot(dist_arduino_np, y_vals, color='darkorchid', linestyle="dotted", label=f'Regresión lineal \n $y = {a}x + {b}$')
+plt.errorbar(dist_arduino, dist_regla, xerr=errores, yerr=0.1, fmt='o', color='orangered', ecolor='black', label='_nolegend_', capsize=8)
+plt.plot(dist_arduino, dist_regla, 'o', color='orangered', label='Datos')
+plt.plot(dist_arduino_np, y_vals, color='darkorchid', linestyle="dotted", label=f'Regresión lineal \n $y = {a}x {b}$')
 plt.legend()
 plt.xlabel('Distancia Arduino (cm)')
 plt.ylabel('Distancia Regla (cm)')
@@ -123,7 +124,7 @@ plt.show()
 
 
 
-masa_del_trieno = [172.59 + 109.34, 150.58 + 109.34, 77.51+ 109.34, 72.32+ 109.34, 27.92+ 109.34] 
+masa_del_trineo = [172.59 + 109.34, 150.58 + 109.34, 77.51+ 109.34, 72.32+ 109.34, 27.92 + 109.34] 
 weight_mass = [72.43, 72.43, 72.43, 72.43, 72.43]
 # Datos
 tiempo = [0, 500, 1000, 1500, 2000, 2500]
@@ -143,6 +144,13 @@ masa3, sigma_d3 = lineal_ajustada(np.array(posiciones_masa_3), a, b, 0.1, cov)
 masa4, sigma_d4 = lineal_ajustada(np.array(posiciones_masa_4), a, b, 0.1, cov)
 masa5, sigma_d5 = lineal_ajustada(np.array(posiciones_masa_5), a, b, 0.1, cov)
 
+# Printea posicion final de cada masa
+print(f"Posicion final de la masa 1: {masa1[-1]}")
+print(f"Posicion final de la masa 2: {masa2[-1]}")
+print(f"Posicion final de la masa 3: {masa3[-1]}")
+print(f"Posicion final de la masa 4: {masa4[-1]}")
+print(f"Posicion final de la masa 5: {masa5[-1]}")
+
 # Definir errores con la misma longitud que cada array de masa
 errores1 = [mediaerrores] * len(masa1)
 errores2 = [mediaerrores] * len(masa2)
@@ -152,19 +160,19 @@ errores5 = [mediaerrores] * len(masa5)
 
 # Añadir barras de error
 elCapSais = 8
-plt.errorbar(tiempo[:len(masa1)], masa1, xerr=0.5, yerr=sigma_d1, fmt='o', color='darkmagenta', ecolor='black', capsize=elCapSais, label='_nolegend_', marker='o')
-plt.errorbar(tiempo[:len(masa2)], masa2, xerr=0.5, yerr=sigma_d2, fmt='o', color='salmon', ecolor='black', capsize=elCapSais, label='_nolegend_', marker='o')
-plt.errorbar(tiempo[:len(masa3)], masa3, xerr=0.5, yerr=sigma_d3, fmt='o', color='lightskyblue', ecolor='black', capsize=elCapSais, label='_nolegend_', marker='o')
-plt.errorbar(tiempo[:len(masa4)], masa4, xerr=0.5, yerr=sigma_d4, fmt='o', color='forestgreen', ecolor='black', capsize=elCapSais, label='_nolegend_', marker='o')
-plt.errorbar(tiempo[:len(masa5)], masa5, xerr=0.5, yerr=sigma_d5, fmt='o', color='hotpink', ecolor='black', capsize=elCapSais, label='_nolegend_', marker='o')
+# Plot error bars without adding them to the legend
+plt.errorbar(tiempo[:len(masa1)], masa1, xerr=0.5, yerr=sigma_d1, fmt='o', color='darkmagenta', ecolor='black', capsize=elCapSais, label='_nolegend_')
+plt.errorbar(tiempo[:len(masa2)], masa2, xerr=0.5, yerr=sigma_d2, fmt='o', color='salmon', ecolor='black', capsize=elCapSais, label='_nolegend_')
+plt.errorbar(tiempo[:len(masa3)], masa3, xerr=0.5, yerr=sigma_d3, fmt='o', color='lightskyblue', ecolor='black', capsize=elCapSais, label='_nolegend_')
+plt.errorbar(tiempo[:len(masa4)], masa4, xerr=0.5, yerr=sigma_d4, fmt='o', color='forestgreen', ecolor='black', capsize=elCapSais, label='_nolegend_')
+plt.errorbar(tiempo[:len(masa5)], masa5, xerr=0.5, yerr=sigma_d5, fmt='o', color='hotpink', ecolor='black', capsize=elCapSais, label='_nolegend_')
 
-# Añadir puntos de datos sin barras de error para la leyenda
-plt.plot(tiempo[:len(masa1)], masa1, 'o', color='darkmagenta', label='Masa 1')
-plt.plot(tiempo[:len(masa2)], masa2, 'o', color='salmon', label='Masa 2')
-plt.plot(tiempo[:len(masa3)], masa3, 'o', color='lightskyblue', label='Masa 3')
-plt.plot(tiempo[:len(masa4)], masa4, 'o', color='forestgreen', label='Masa 4')
-plt.plot(tiempo[:len(masa5)], masa5, 'o', color='hotpink', label='Masa 5')
-# Configuración del gráfico
+# Add data points to the legend
+plt.scatter(tiempo[:len(masa1)], masa1, color='darkmagenta', label='Masa 1')
+plt.scatter(tiempo[:len(masa2)], masa2, color='salmon', label='Masa 2')
+plt.scatter(tiempo[:len(masa3)], masa3, color='lightskyblue', label='Masa 3')
+plt.scatter(tiempo[:len(masa4)], masa4, color='forestgreen', label='Masa 4')
+plt.scatter(tiempo[:len(masa5)], masa5, color='hotpink', label='Masa 5')
 
 plt.xlabel('Tiempo (ms)')
 plt.ylabel('Posición (cm)')
@@ -181,19 +189,58 @@ tiempos_finales = [2.5, 1.5, 1, 1, 1]
 posiciones_finales, _ = lineal_ajustada([61.97066667, 47.5575, 34.204, 39.927, 41.616], a, b, 0.1, cov)
 
 aceleraciones_trineo = []
-for i in range(len(masa_del_trieno)): 
+for i in range(len(masa_del_trineo)): 
     aceleraciones_trineo.append(aceleracion_calc(tiempos_finales[i], posiciones_finales[i]))
 
-print(f"Aceleraciones son: {aceleraciones_trineo}")
+print(f"Aceleraciones son: {aceleraciones_trineo }")
 
 
-plt.scatter(masa_del_trieno, aceleraciones_trineo, color='darkred', s=15)
-#ver y err
-plt.errorbar(masa_del_trieno, aceleraciones_trineo, xerr=0.01, yerr=0.5, fmt='o', color='red', ecolor='black', capsize=8)
+plt.scatter(masa_del_trineo, aceleraciones_trineo, color='darkred', s=15)
+
+# Lista de colores
+colores = ['darkmagenta', 'salmon', 'lightskyblue', 'forestgreen', 'hotpink']
+
+xerr = 0.01
+yerr = 0.5
+
+massesList = []
+acelsList = []
+
+# Graficar cada punto con un color diferente
+for i in range(len(masa_del_trineo)):
+    massesList.append(masa_del_trineo[i])
+    acelsList.append(aceleraciones_trineo[i])
+    # plt.errorbar(masa_del_trineo[i], aceleraciones_trineo[i], xerr=xerr, yerr=yerr, fmt='o', color=colores[i], ecolor='black', capsize=8)
+
+# Plot error bars without adding them to the legend
+plt.errorbar(massesList[0], acelsList[0], xerr=xerr, yerr=yerr, fmt='o', color=colores[0], ecolor='black', capsize=8, label='_nolegend_')
+plt.errorbar(massesList[1], acelsList[1], xerr=xerr, yerr=yerr, fmt='o', color=colores[1], ecolor='black', capsize=8, label='_nolegend_')
+plt.errorbar(massesList[2], acelsList[2], xerr=xerr, yerr=yerr, fmt='o', color=colores[2], ecolor='black', capsize=8, label='_nolegend_')
+plt.errorbar(massesList[3], acelsList[3], xerr=xerr, yerr=yerr, fmt='o', color=colores[3], ecolor='black', capsize=8, label='_nolegend_')
+plt.errorbar(massesList[4], acelsList[4], xerr=xerr, yerr=yerr, fmt='o', color=colores[4], ecolor='black', capsize=8, label='_nolegend_')
+
+# Add data points to the legend
+plt.plot(massesList[0], acelsList[0], 'o', color=colores[0], label='Masa 1')
+plt.plot(massesList[1], acelsList[1], 'o', color=colores[1], label='Masa 2')
+plt.plot(massesList[2], acelsList[2], 'o', color=colores[2], label='Masa 3')
+plt.plot(massesList[3], acelsList[3], 'o', color=colores[3], label='Masa 4')
+plt.plot(massesList[4], acelsList[4], 'o', color=colores[4], label='Masa 5')
+
+# Show legend
 plt.legend()
 plt.xlabel('Masa m en g')
 plt.ylabel('Aceleracion del trineo')
-plt.scatter(masa_del_trieno, aceleraciones_trineo)
+plt.scatter(masa_del_trineo, aceleraciones_trineo)
 plt.show()
+
+
+mu_d = []
+
+for i in range(5):
+    p_m = 9.8*masa_del_trineo[i]
+    p_M = 9.8*weight_mass[i]
+    mu_d.append((aceleraciones_trineo[i]*(masa_del_trineo[i] + weight_mass[i]) - p_M)/p_m)
+
+print(f"Rozamientos Dinamicos: {mu_d}")
 
     
