@@ -185,17 +185,36 @@ def aceleracion_calc(t_f, pos_f):
    return (2*pos_f)/(t_f**2)
 
 
+def aceleracionCuadratica(times:list, positions:list):
+    # Calcular los coeficientes del ajuste cuadrático
+    coeficientes = np.polyfit(times, positions, 2)
+    return coeficientes[0]*2
+
+
 tiempos_finales = [2.5, 1.5, 1, 1, 1]
-posiciones_finales, _ = lineal_ajustada([61.97066667, 47.5575, 34.204, 39.927, 41.616], a, b, 0.1, cov)
+posiciones_finales, _ = lineal_ajustada([61.97066667 - 10, 47.5575 - 10, 34.204 - 10, 39.927 - 10, 41.616 - 10], a, b, 0.1, cov)
+
+posiciones1 = [10.098, 12.21733333, 20.17333333, 34.33433333, 52.68866667, 61.97066667]
+posiciones2 = [10.1235, 12.206, 24.8455, 47.5575]
+posiciones3 = [10.421, 13.7615, 34.204]
+posiciones4 = [9.996, 13.685, 37.927]
+posiciones5 = [9.996, 12.461, 41.616]
+
+aceleracion1 = aceleracionCuadratica([0, 0.5, 1, 1.5, 2, 2.5], posiciones1)
+aceleracion2 = aceleracionCuadratica([0, 0.5, 1, 1.5], posiciones2)
+aceleracion3 = aceleracionCuadratica([0, 0.5, 1], posiciones3)
+aceleracion4 = aceleracionCuadratica([0, 0.5, 1], posiciones4)
+aceleracion5 = aceleracionCuadratica([0, 0.5, 1], posiciones5)
+
 
 aceleraciones_trineo = []
 for i in range(len(masa_del_trineo)): 
     aceleraciones_trineo.append(aceleracion_calc(tiempos_finales[i], posiciones_finales[i]))
 
-print(f"Aceleraciones son: {aceleraciones_trineo }")
+print(f"Aceleraciones Viejas son: {aceleraciones_trineo }")
+# plt.scatter(masa_del_trineo, aceleraciones_trineo, color='darkred', s=15)
 
 
-plt.scatter(masa_del_trineo, aceleraciones_trineo, color='darkred', s=15)
 
 # Lista de colores
 colores = ['darkmagenta', 'salmon', 'lightskyblue', 'forestgreen', 'hotpink']
@@ -204,43 +223,51 @@ xerr = 0.01
 yerr = 0.5
 
 massesList = []
-acelsList = []
+acelsList = [aceleracion1, aceleracion2, aceleracion3, aceleracion4, aceleracion5]
+print(f"Accelerations New are: {acelsList}")
 
-# Graficar cada punto con un color diferente
-for i in range(len(masa_del_trineo)):
-    massesList.append(masa_del_trineo[i])
-    acelsList.append(aceleraciones_trineo[i])
-    # plt.errorbar(masa_del_trineo[i], aceleraciones_trineo[i], xerr=xerr, yerr=yerr, fmt='o', color=colores[i], ecolor='black', capsize=8)
+# # Graficar cada punto con un color diferente
+# for i in range(len(masa_del_trineo)):
+#     massesList.append(masa_del_trineo[i])
+#     acelsList.append(aceleraciones_trineo[i])
+#     plt.errorbar(masa_del_trineo[i], aceleraciones_trineo[i], xerr=xerr, yerr=yerr, fmt='o', color=colores[i], ecolor='black', capsize=8)
 
-# Plot error bars without adding them to the legend
-plt.errorbar(massesList[0], acelsList[0], xerr=xerr, yerr=yerr, fmt='o', color=colores[0], ecolor='black', capsize=8, label='_nolegend_')
-plt.errorbar(massesList[1], acelsList[1], xerr=xerr, yerr=yerr, fmt='o', color=colores[1], ecolor='black', capsize=8, label='_nolegend_')
-plt.errorbar(massesList[2], acelsList[2], xerr=xerr, yerr=yerr, fmt='o', color=colores[2], ecolor='black', capsize=8, label='_nolegend_')
-plt.errorbar(massesList[3], acelsList[3], xerr=xerr, yerr=yerr, fmt='o', color=colores[3], ecolor='black', capsize=8, label='_nolegend_')
-plt.errorbar(massesList[4], acelsList[4], xerr=xerr, yerr=yerr, fmt='o', color=colores[4], ecolor='black', capsize=8, label='_nolegend_')
+# # Plot error bars without adding them to the legend
+# plt.errorbar(massesList[0], acelsList[0], xerr=xerr, yerr=yerr, fmt='o', color=colores[0], ecolor='black', capsize=8, label='_nolegend_')
+# plt.errorbar(massesList[1], acelsList[1], xerr=xerr, yerr=yerr, fmt='o', color=colores[1], ecolor='black', capsize=8, label='_nolegend_')
+# plt.errorbar(massesList[2], acelsList[2], xerr=xerr, yerr=yerr, fmt='o', color=colores[2], ecolor='black', capsize=8, label='_nolegend_')
+# plt.errorbar(massesList[3], acelsList[3], xerr=xerr, yerr=yerr, fmt='o', color=colores[3], ecolor='black', capsize=8, label='_nolegend_')
+# plt.errorbar(massesList[4], acelsList[4], xerr=xerr, yerr=yerr, fmt='o', color=colores[4], ecolor='black', capsize=8, label='_nolegend_')
 
-# Add data points to the legend
-plt.plot(massesList[0], acelsList[0], 'o', color=colores[0], label='Masa 1')
-plt.plot(massesList[1], acelsList[1], 'o', color=colores[1], label='Masa 2')
-plt.plot(massesList[2], acelsList[2], 'o', color=colores[2], label='Masa 3')
-plt.plot(massesList[3], acelsList[3], 'o', color=colores[3], label='Masa 4')
-plt.plot(massesList[4], acelsList[4], 'o', color=colores[4], label='Masa 5')
+# # Add data points to the legend
+# plt.plot(massesList[0], acelsList[0], 'o', color=colores[0], label='Masa 1')
+# plt.plot(massesList[1], acelsList[1], 'o', color=colores[1], label='Masa 2')
+# plt.plot(massesList[2], acelsList[2], 'o', color=colores[2], label='Masa 3')
+# plt.plot(massesList[3], acelsList[3], 'o', color=colores[3], label='Masa 4')
+# plt.plot(massesList[4], acelsList[4], 'o', color=colores[4], label='Masa 5')
 
-# Show legend
-plt.legend()
-plt.xlabel('Masa m en g')
-plt.ylabel('Aceleracion del trineo')
-plt.scatter(masa_del_trineo, aceleraciones_trineo)
-plt.show()
+# # Show legend
+# plt.legend()
+# plt.xlabel('Masa m en g')
+# plt.ylabel('Aceleracion del trineo')
+# plt.scatter(masa_del_trineo, acelsList)
+# # plt.scatter(masa_del_trineo, aceleraciones_trineo)
+# plt.show()
 
-
-mu_d = []
-
+mu_d_list = []
 for i in range(5):
     p_m = 9.8*masa_del_trineo[i]
     p_M = 9.8*weight_mass[i]
-    mu_d.append((aceleraciones_trineo[i]*(masa_del_trineo[i] + weight_mass[i]) - p_M)/p_m)
+    mu_d_list.append((acelsList[i]*(masa_del_trineo[i] + weight_mass[i]) - p_M)/p_m)
+print(f"Rozamientos Dinamicos: {mu_d_list}")
 
-print(f"Rozamientos Dinamicos: {mu_d}")
+# mu_d = []
+
+# for i in range(5):
+#     p_m = 9.8*masa_del_trineo[i]
+#     p_M = 9.8*weight_mass[i]
+#     mu_d.append((aceleraciones_trineo[i]*(masa_del_trineo[i] + weight_mass[i]) - p_M)/p_m)
+
+# print(f"Rozamientos Dinamicos: {mu_d}")
 
     

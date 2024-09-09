@@ -1,0 +1,6 @@
+mu_d_list = []
+for i in range(5):
+    p_m = 9.8*masa_del_trineo[i]
+    p_M = 9.8*weight_mass[i]
+    mu_d_list.append((acelsList[i]*(masa_del_trineo[i] + weight_mass[i]) - p_M)/p_m)
+print(f"Rozamientos Dinamicos: {mu_d_list}")
