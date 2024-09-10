@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-dist_arduino = [10.23, 18.41, 28.34, 37.74, 47.04] # Promedio de las distancias medidas
-dist_regla = [10, 20, 30, 40, 50]
+dist_arduino = [10.23/100, 18.41/100, 28.34/100, 37.74/100, 47.04/100] # Promedio de las distancias medidas
+dist_regla = [10/100, 20/100, 30/100, 40/100, 50/100]
 
-error_arduino = [10.23 - 10, 20 - 18.41, 30 - 28.34, 40 - 37.74, 50 - 47.04 ]
+error_arduino = [(10.23 - 9.995)/100, (20 - 18.41)/100, (30 - 28.34)/100, (40 - 37.74)/100, (50 - 47.04)/100 ]
 
 def ajuste_lineal(x, y, sigma_x, sigma_y):
     ''' Calcula la regresión lineal de los datos, y propaga sus incertezas. '''
@@ -42,18 +42,19 @@ def ajuste_lineal(x, y, sigma_x, sigma_y):
 
 
 def lineal_ajustada(x, a, b, sigma_x, cov):
-    ''' Evalúa la regresión lineal con parámetros de ajustes `a` y `b`,
-    y propaga las incertezas a partir de `sigma_x` y la matriz de covarianza `cov`. '''
+    ''' Evalúa la regresión lineal con parámetros de ajustes 'a' y 'b',
+    y propaga las incertezas a partir de 'sigma_x' y la matriz de covarianza 'cov'. 
+    Recibe valores en centimetros y devuelve en metros. '''
     x = np.asarray(x)
     y = a*x + b
     sigma_y = ( a**2 * sigma_x**2 + x**2 * cov[0, 0] + cov[1, 1] + 2*x*cov[0, 1] )**0.5
     return y , sigma_y
 
 
-sigma_distArduino = 0.01 # desvio estandar muestral la distancia medida por el arduino en cm
-sigma_distRegla = 0.1 # incerteza en la distancia medida por la regla en cm
+sigma_distArduino = 0.0001 # desvio estandar muestral la distancia medida por el arduino en cm
+sigma_distRegla = 0.001 # incerteza en la distancia medida por la regla en cm
 
-# hago la regresión lineal usando la rutina `ajuste_lineal`
+# hago la regresión lineal usando la rutina 'ajuste_lineal'
 a, b, cov = ajuste_lineal(dist_arduino, dist_regla, sigma_distRegla, sigma_distArduino)
 
 a = round(a, 4)
@@ -70,8 +71,9 @@ print(f'cov(v, d0) = {cov[0, 1]}')
 
 ''' ----------------------------------------------------------------------------------- '''
 ''' # Posicion en funcion del tiempo '''
-dist_arduino = [10.23, 18.41, 28.34, 37.74, 47.04] # Promedio de las distancias medidas
-dist_regla = [10, 20, 30, 40, 50]
+dist_arduino = [10.23/100, 18.41/100, 28.34/100, 37.74/100, 47.04/100] # Promedio de las distancias medidas
+dist_regla = [10/100, 20/100, 30/100, 40/100, 50/100]
+
 
 
 # # Calcular los coeficientes de la regresión lineal
@@ -82,19 +84,17 @@ dist_regla = [10, 20, 30, 40, 50]
 # def funcion_lineal(a, b, x):
 #     return a * x + b
 
-#users\gonza
-
 
 # # Calcular el desvío estándar muestral de a y b
 # desvio_a = np.std([a], ddof=1)
 # desvio_b = np.std([b], ddof=1)
-
 
 # Calcular el desvío estándar muestral de dist_arduino
 desvio_d = np.std(dist_arduino, ddof=1)
 
 # Convertir dist_arduino a un array de numpy
 dist_arduino_np = np.array(dist_arduino)
+
 
 
 # Generar valores para la línea de regresión
@@ -116,10 +116,10 @@ plt.errorbar(dist_arduino, dist_regla, xerr=errores, yerr=0.1, fmt='o', color='o
 plt.plot(dist_arduino, dist_regla, 'o', color='orangered', label='Datos')
 plt.plot(dist_arduino_np, y_vals, color='darkorchid', linestyle="dotted", label=f'Regresión lineal \n $y = {a}x {b}$')
 plt.legend()
-plt.xlabel('Distancia Arduino (cm)')
-plt.ylabel('Distancia Regla (cm)')
-plt.xlim(8, 54) 
-plt.ylim(8, 54)
+plt.xlabel('Distancia Arduino (m)')
+plt.ylabel('Distancia Regla (m)')
+# plt.xlim(0.08, 0.54) 
+# plt.ylim(0.08, 0.54)
 plt.show()
 
 
@@ -131,18 +131,18 @@ tiempo = [0, 500, 1000, 1500, 2000, 2500]
 
 
 # Datos de las posiciones de las masas
-posiciones_masa_1 = [10.098, 12.21733333, 20.17333333, 34.33433333, 52.68866667, 61.97066667]
-posiciones_masa_2 = [10.1235, 12.206, 24.8455, 47.5575]
-posiciones_masa_3 = [10.421, 13.7615, 34.204]
-posiciones_masa_4 = [9.996, 13.685, 37.927]
-posiciones_masa_5 = [9.996, 12.461, 41.616]
+posiciones1 = [(10.098 - 9.995)/100, (12.21733333 - 9.995)/100, (20.17333333 - 9.995)/100, (34.33433333 - 9.995)/100, (52.68866667 - 9.995)/100, (61.97066667 - 9.995)/100]
+posiciones2 = [(10.1235 - 9.995)/100, (12.206 - 9.995)/100, (24.8455 - 9.995)/100, (47.5575 - 9.995)/100]
+posiciones3 = [(10.421 - 9.995)/100, (13.7615 - 9.995)/100, (34.204 - 9.995)/100]
+posiciones4 = [(9.996 - 9.995)/100, (13.685 - 9.995)/100, (37.927 - 9.995)/100]
+posiciones5 = [(9.996 - 9.995)/100, (12.461 - 9.995)/100, (41.616 - 9.995)/100]
 
 # Aplicar la función lineal_ajustada a cada masa
-masa1, sigma_d1 = lineal_ajustada(np.array(posiciones_masa_1), a, b, 0.1, cov)
-masa2, sigma_d2 = lineal_ajustada(np.array(posiciones_masa_2), a, b, 0.1, cov)
-masa3, sigma_d3 = lineal_ajustada(np.array(posiciones_masa_3), a, b, 0.1, cov)
-masa4, sigma_d4 = lineal_ajustada(np.array(posiciones_masa_4), a, b, 0.1, cov)
-masa5, sigma_d5 = lineal_ajustada(np.array(posiciones_masa_5), a, b, 0.1, cov)
+masa1, sigma_d1 = lineal_ajustada(np.array(posiciones1), a, b, 0.1, cov)
+masa2, sigma_d2 = lineal_ajustada(np.array(posiciones2), a, b, 0.1, cov)
+masa3, sigma_d3 = lineal_ajustada(np.array(posiciones3), a, b, 0.1, cov)
+masa4, sigma_d4 = lineal_ajustada(np.array(posiciones4), a, b, 0.1, cov)
+masa5, sigma_d5 = lineal_ajustada(np.array(posiciones5), a, b, 0.1, cov)
 
 # Printea posicion final de cada masa
 print(f"Posicion final de la masa 1: {masa1[-1]}")
@@ -175,10 +175,10 @@ plt.scatter(tiempo[:len(masa4)], masa4, color='forestgreen', label='Masa 4')
 plt.scatter(tiempo[:len(masa5)], masa5, color='hotpink', label='Masa 5')
 
 plt.xlabel('Tiempo (ms)')
-plt.ylabel('Posición (cm)')
+plt.ylabel('Posición (m)')
 plt.legend()
 plt.grid(True)
-plt.ylim(8, 70)
+# plt.ylim(0.08, 0.7)
 plt.show()
 
 def aceleracion_calc(t_f, pos_f):
@@ -192,13 +192,7 @@ def aceleracionCuadratica(times:list, positions:list):
 
 
 tiempos_finales = [2.5, 1.5, 1, 1, 1]
-posiciones_finales, _ = lineal_ajustada([61.97066667 - 10, 47.5575 - 10, 34.204 - 10, 39.927 - 10, 41.616 - 10], a, b, 0.1, cov)
-
-posiciones1 = [10.098, 12.21733333, 20.17333333, 34.33433333, 52.68866667, 61.97066667]
-posiciones2 = [10.1235, 12.206, 24.8455, 47.5575]
-posiciones3 = [10.421, 13.7615, 34.204]
-posiciones4 = [9.996, 13.685, 37.927]
-posiciones5 = [9.996, 12.461, 41.616]
+posicionesfinales, _ = lineal_ajustada([(61.97066667 - 9.995)/100, (47.5575 - 9.995)/100, (34.204 - 9.995)/100, (39.927 - 9.995)/100, (41.616 - 9.995)/100], a, b, 0.1, cov)
 
 aceleracion1 = aceleracionCuadratica([0, 0.5, 1, 1.5, 2, 2.5], posiciones1)
 aceleracion2 = aceleracionCuadratica([0, 0.5, 1, 1.5], posiciones2)
@@ -206,10 +200,9 @@ aceleracion3 = aceleracionCuadratica([0, 0.5, 1], posiciones3)
 aceleracion4 = aceleracionCuadratica([0, 0.5, 1], posiciones4)
 aceleracion5 = aceleracionCuadratica([0, 0.5, 1], posiciones5)
 
-
 aceleraciones_trineo = []
 for i in range(len(masa_del_trineo)): 
-    aceleraciones_trineo.append(aceleracion_calc(tiempos_finales[i], posiciones_finales[i]))
+    aceleraciones_trineo.append(aceleracion_calc(tiempos_finales[i], posicionesfinales[i]))
 
 print(f"Aceleraciones Viejas son: {aceleraciones_trineo }")
 # plt.scatter(masa_del_trineo, aceleraciones_trineo, color='darkred', s=15)
@@ -224,7 +217,7 @@ yerr = 0.5
 
 massesList = []
 acelsList = [aceleracion1, aceleracion2, aceleracion3, aceleracion4, aceleracion5]
-print(f"Accelerations New are: {acelsList}")
+# print(f"Accelerations New are: {acelsList}")
 
 # # Graficar cada punto con un color diferente
 # for i in range(len(masa_del_trineo)):
@@ -258,7 +251,7 @@ mu_d_list = []
 for i in range(5):
     p_m = 9.8*masa_del_trineo[i]
     p_M = 9.8*weight_mass[i]
-    mu_d_list.append((acelsList[i]*(masa_del_trineo[i] + weight_mass[i]) - p_M)/p_m)
+    mu_d_list.append(-1 * ((aceleraciones_trineo[i]*(masa_del_trineo[i] + weight_mass[i]) - p_M)/p_m))
 print(f"Rozamientos Dinamicos: {mu_d_list}")
 
 # mu_d = []
